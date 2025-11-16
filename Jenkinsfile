@@ -5,7 +5,7 @@ pipeline {
     agent any // Jenkins가 실행될 환경
 
     environment {
-        DOCKER_CREDS = credentials('withyou02')
+        DOCKER_CREDS = credentials('DOCKER_HUB_CREDS')
     }
 
     stages {
