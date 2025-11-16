@@ -6,7 +6,7 @@ pipeline {
 
     environment {
         // 2단계에서 Jenkins에 저장한 Docker Hub 자격 증명 ID
-        DOCKER_CREDS = credentials('DOCKER_HUB_CREDS')
+        DOCKER_CREDS = credentials('withyou02')
     }
 
     stages {
