@@ -1,16 +1,15 @@
-// Jenkinsfile
+//Jenkins
 def DOCKER_USERNAME = "withyou02" 
 
 pipeline {
     agent any // Jenkins가 실행될 환경
 
     environment {
-        // 2단계에서 Jenkins에 저장한 Docker Hub 자격 증명 ID
         DOCKER_CREDS = credentials('withyou02')
     }
 
     stages {
-        // 1. GitHub에서 최신 코드를 가져온다
+        // 3. GitHub에서 최신 코드를 가져온다
         stage('Checkout Code') {
             steps {
                 echo "CI: 1. Checking out code from GitHub..."
@@ -18,27 +17,62 @@ pipeline {
             }
         }
 
-        // 2. Auth 서비스만 CI 테스트 (간단한 예시)
-        stage('Build & Push Auth Service') {
-            steps {
-                script {
-                    echo "CI: 2. Building auth-service..."
-                    
-                    // 3. "손으로" 쳤던 'docker build'를 실행한다.
-                    //    [중요] 이미지 태그가 'auth-app:v1'이 아닌,
-                    //    Docker Hub ID가 포함된 'my-docker-id/auth-app:v1'이 되어야 함.
-                    def img = docker.build("${DOCKER_USERNAME}/auth-app:v1", "./auth_service")
-                    
-                    // 4. Jenkins의 자격 증명으로 Docker Hub에 로그인
-                    docker.withRegistry('https://registry.hub.docker.com', DOCKER_CREDS) {
-                        
-                        // 5. "공용 창고"(Docker Hub)로 이미지를 push한다
-                        echo "CI: 3. Pushing image to Docker Hub..."
-                        img.push()
+        // 4. "기본 기술"(bat)로 5개 서비스 빌드 & 푸시
+        stage('Build & Push All Services') {
+            parallel {
+                stage('Auth Service') {
+                    steps {
+                        bat """
+                            echo "CI: Building auth_service..."
+                            docker build --no-cache -t ${DOCKER_USERNAME}/auth-app:v1 ./auth_service
+                            echo "CI: Logging in to Docker Hub..."
+                            echo "${DOCKER_CREDS_PSW}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+                            echo "CI: Pushing auth-app:v1..."
+                            docker push ${DOCKER_USERNAME}/auth-app:v1
+                        """
                     }
-                    echo "CI: 4. Build complete! auth-app:v1 is pushed."
                 }
-            }
-        }
-    }
-}
+                stage('Product Service') {
+                    steps {
+                        bat """
+                            echo "CI: Building product_service..."
+                            docker build --no-cache -t ${DOCKER_USERNAME}/product-app:v1 ./product_service
+                            echo "${DOCKER_CREDS_PSW}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+                            docker push ${DOCKER_USERNAME}/product-app:v1
+                        """
+                    }
+                }
+                stage('Order Service') {
+                    steps {
+                        bat """
+                            echo "CI: Building order_service..."
+                            docker build --no-cache -t ${DOCKER_USERNAME}/order-app:v1 ./order_service
+                            echo "${DOCKER_CREDS_PSW}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+                            docker push ${DOCKER_USERNAME}/order-app:v1
+                        """
+                    }
+                }
+                stage('Inventory Blue') {
+                    steps {
+                        bat """
+                            echo "CI: Building inventory_service_blue..."
+                            docker build --no-cache -t ${DOCKER_USERNAME}/inventory-app:v1 ./inventory_service_blue
+                            echo "${DOCKER_CREDS_PSW}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+                            docker push ${DOCKER_USERNAME}/inventory-app:v1
+                        """
+                    }
+                }
+                stage('Inventory Green') {
+                    steps {
+                        bat """
+                            echo "CI: Building inventory_service_green..."
+                            docker build --no-cache -t ${DOCKER_USERNAME}/inventory-app:v2 ./inventory_service_green
+                            echo "${DOCKER_CREDS_PSW}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+                            docker push ${DOCKER_USERNAME}/inventory-app:v2
+                        """
+                    }
+                }
+            } // end parallel
+        } // end stage
+    } // end stages
+} // end pipeline
