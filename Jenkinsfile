@@ -27,7 +27,7 @@ pipeline {
                     // 3. "손으로" 쳤던 'docker build'를 실행한다.
                     //    [중요] 이미지 태그가 'auth-app:v1'이 아닌,
                     //    Docker Hub ID가 포함된 'my-docker-id/auth-app:v1'이 되어야 함.
-                    def img = docker.build("${DOCKER_USERNAME}/auth-app:v1", "./auth-service")
+                    def img = docker.build("${DOCKER_USERNAME}/auth-app:v1", "./auth_service")
                     
                     // 4. Jenkins의 자격 증명으로 Docker Hub에 로그인
                     docker.withRegistry('https://registry.hub.docker.com', DOCKER_CREDS) {
