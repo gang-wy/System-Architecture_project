@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-main
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-main
+  template:
+    metadata:
+      labels:
+        app: frontend-main
+    spec:
+      containers:
+      - name: frontend-main
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: main-index
+          mountPath: /usr/share/nginx/html/index.html
+          subPath: index.html
+      volumes:
+      - name: main-index
+        configMap:
+          name: main-index
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-main-svc
+spec:
+  type: ClusterIP
+  selector:
+    app: frontend-main
+  ports:
+  - port: 80
+    targetPort: 80

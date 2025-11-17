@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>E-commerce Main</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 50px;
+        }
+        h1 {
+            font-size: 40px;
+            margin-bottom: 30px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            width: 220px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+            transition: 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #aaa;
+        }
+        a {
+            display: block;
+            padding: 10px;
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-decoration: none;
+        }
+        a:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>E-commerce System</h1>
+    <div class="container">
+
+        <div class="card">
+            <h3>Auth Service</h3>
+            <p>로그인/인증 서비스 화면</p>
+            <a href="/auth">바로가기</a>
+        </div>
+
+        <div class="card">
+            <h3>Product Service</h3>
+            <p>상품 목록 서비스</p>
+            <a href="/product">바로가기</a>
+        </div>
+
+        <div class="card">
+            <h3>Order Service</h3>
+            <p>주문 처리 서비스</p>
+            <a href="/order">바로가기</a>
+        </div>
+
+        <div class="card">
+            <h3>Inventory Service</h3>
+            <p>Blue/Green 전환된 재고 서비스</p>
+            <a href="/inventorys">바로가기</a>
+        </div>
+
+    </div>
+</body>
+</html>
