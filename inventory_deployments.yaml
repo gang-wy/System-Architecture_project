@@ -44,4 +44,4 @@ spec:
       - name: inventory-app
         image: withyou02/ecommerce-inventory-green:v2
         ports:
-        - containerPort: 80 
+        - containerPort: 80

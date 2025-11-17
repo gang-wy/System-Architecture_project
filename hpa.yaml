@@ -1,4 +1,5 @@
 # HPA
+# 현재 사용하지 않음
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
