@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: auth-app
-        image: auth-app:v1
+        image: withyou02/ecommerce-auth:v1
         ports:
         - containerPort: 80
 
@@ -52,7 +52,7 @@ spec:
     spec:
       containers:
       - name: product-app
-        image: product-app:v1
+        image: withyou02/ecommerce-product:v1
         ports:
         - containerPort: 80
 
@@ -88,7 +88,7 @@ spec:
     spec:
       containers:
       - name: order-app
-        image: order-app:v1
+        image: withyou02/ecommerce-order:v1
         ports:
         - containerPort: 80
 

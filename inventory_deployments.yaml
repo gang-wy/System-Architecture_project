@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: inventory-app
-        image: inventory-app:v1
+        image: withyou02/ecommerce-inventory-blue:v1
         ports:
         - containerPort: 80
 
@@ -42,6 +42,6 @@ spec:
     spec:
       containers:
       - name: inventory-app
-        image: inventory-app:v2
+        image: withyou02/ecommerce-inventory-green:v2
         ports:
-        - containerPort: 80
+        - containerPort: 80 
