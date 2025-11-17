@@ -35,7 +35,6 @@ jobs:
       - name: Build and push ${{ matrix.service }} image
         uses: docker/build-push-action@v6
         with:
-          context: ./\${{ matrix.service }}
+          context: ./${{ matrix.service }}
           push: true
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/\${{ matrix.service }}:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/${{ matrix.service }}:latest
